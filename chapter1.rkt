@@ -1,44 +1,51 @@
 #lang planet neil/sicp
 
+(#%require rackunit)
+
 ;; Exercise 1.1
-10
-; 10
-(+ 5 3 4)
-; 12
-(- 9 1)
-; 8
-(/ 6 2)
-; 3
-(+ (* 2 4) (- 4 6))
-; 6
+(check-eqv? 10 10)
+(check-eqv? (+ 5 3 4) 12)
+(check-eqv? (- 9 1) 8)
+(check-eqv? (/ 6 2) 3)
+(check-eqv? (+ (* 2 4) (- 4 6)) 6)
+
 (define a 3)
-; 3
+(check-eqv? a 3)
+
 (define b (+ a 1))
-; 4
-(+ a b (* a b))
-; 19
-(= a b)
-; #f
-(if (and (> b a) (< b (* a b)))
-    b
-    a)
-; 4
-(cond ((= a 4) 6)
-      ((= b 4) (+ 6 7 a))
-      (else 25))
-; 16
-(+ 2 (if (> b a) b a))
-; 6
-(* (cond ((> a b) a)
-         ((< a b) b)
-         (else -1))
-   (+ a 1))
-; 16
+(check-eqv? b 4)
+
+(check-eqv? (+ a b (* a b)) 19)
+
+(check-eqv? (= a b) #f)
+
+(check-eqv?
+  (if (and (> b a) (< b (* a b)))
+      b
+      a)
+  4)
+
+(check-eqv?
+  (cond ((= a 4) 6)
+        ((= b 4) (+ 6 7 a))
+        (else 25))
+  16)
+
+(check-eqv? (+ 2 (if (> b a) b a)) 6)
+
+(check-eqv?
+  (* (cond ((> a b) a)
+           ((< a b) b)
+           (else -1))
+     (+ a 1))
+  16)
 
 ;; Exercise 1.2
 
-(/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
-   (* 3 (- 6 2) (- 2 7)))
+(check-eqv?
+  (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
+     (* 3 (- 6 2) (- 2 7)))
+  -37/150)
 
 ;; Exercise 1.3
 (define (square a) (* a a))
@@ -48,6 +55,11 @@
   (cond ((and (< a b) (< a c)) (sum-squares b c))
         ((and (< b c) (< b a)) (sum-squares c a))
         ((and (< c b) (< c a)) (sum-squares b a))))
+
+(check-eq? (sum-biggest-2-squares 3 4 5) (+ 16 25))
+(check-eq? (sum-biggest-2-squares 4 5 3) (+ 16 25))
+(check-eq? (sum-biggest-2-squares 3 5 4) (+ 16 25))
+(check-eq? (sum-biggest-2-squares 5 3 4) (+ 16 25))
 
 ;; Exercise 1.4
 
@@ -91,21 +103,20 @@
 (define (sqrt-accuracy f x)
   (- x (square (f x))))
 
-; sample bad case:
-;  (sqrt1 1e-16) => 0.03125000000000106
-;  (square 0.03125000000000106) => 0.0009765625000000664
+(check-false (close-enough? (square (sqrt1 1e-16)) 1e-16 1e-5)
+             "Expected sqrt1 to be rubbish with small value")
 
 (define (sqrt-iter2 guess last-guess x)
   (if (converged-enough? guess last-guess)
       guess
       (sqrt-iter2 (improve guess x) guess x)))
 (define (converged-enough? guess last-guess)
-  (close-enough? (/ guess last-guess) 1 0.001))
+  (close-enough? (/ guess last-guess) 1 1e-5))
 (define (sqrt2 x)
   (sqrt-iter2 1.0 0.0 x))
 
-; with sqrt2
-; (sqrt2 1e-16) => 1.0000000009432505e-08
+(check-= (square (sqrt2 1e-16)) 1e-16 1e-5
+         "Expected sqrt2 to not be rubbish with small value")
 
 (define (cube-root-iter guess last-guess x)
   (if (converged-enough? guess last-guess)
@@ -116,3 +127,6 @@
      3.0))
 (define (cube-root x)
   (cube-root-iter 1.0 0.0 x))
+
+(check-= (cube-root 27) 3 1e-5)
+(check-= (cube-root 64) 4 1e-5)
