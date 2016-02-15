@@ -45,9 +45,9 @@
 (define (sum-squares a b)
   (+ (square a) (square b)))
 (define (sum-biggest-2-squares a b c)
-  (cond ((< a b c) (sum-squares b c))
-        ((< b c a) (sum-squares c a))
-        ((< c b a) (sum-squares b a))))
+  (cond ((and (< a b) (< a c)) (sum-squares b c))
+        ((and (< b c) (< b a)) (sum-squares c a))
+        ((and (< c b) (< c a)) (sum-squares b a))))
 
 ;; Exercise 1.4
 
