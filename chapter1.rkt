@@ -133,10 +133,11 @@
 (check-= (cube-root 64) 4 1e-5)
 
 ;; Exercise 1.9
-(define (+ a b)
-  (if (= a 0)
-      b
-      (inc (+ (dec a) b))))
+
+; (define (+ a b)
+;   (if (= a 0)
+;       b
+;       (inc (+ (dec a) b))))
 
 (+ 4 5)
 (inc (+ 3 5))
@@ -150,10 +151,10 @@
 9
 ; recursive process
 
-(define (+ a b)
-  (if (= a 0)
-      b
-      (+ (dec a) (inc b))))
+; (define (+ a b)
+;   (if (= a 0)
+;       b
+;       (+ (dec a) (inc b))))
 
 (+ 4 5)
 (+ 3 6)
