@@ -73,9 +73,10 @@
 (check-eq? (g 10) 1024)
 (check-eq? (g 30) 1073741824)
 
-; h(n) = 2^(2^n)
+; h(n) = ??? Can't seem to express this non-iteratively
 (define (h n) (A 2 n))
-(check-eq? (h 1) 2)
-(check-eq? (h 2) 4)
-(check-eq? (h 3) 16)
-(check-eq? (h 5) '??????)
+(check-eq? (h 1) 2) ; 2                   2^1
+(check-eq? (h 2) 4) ; 2^2                 2^2
+(check-eq? (h 3) 16) ; 2^2^2              2^4
+(check-eq? (h 4) 65536) ; 2^2^2^2         2^16
+(check-eq? (h 5) '??????) ; 2^2^2^2^2     2^65536
